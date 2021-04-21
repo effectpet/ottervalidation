@@ -1,9 +1,22 @@
 {
   "name": "ottervalidation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple, lightweight validation with full typescript support",
+  "keywords": [
+    "typescript",
+    "validation",
+    "ottervalidation"
+  ],
   "license": "MIT",
   "author": "Johannes Vogt <vogt.joo@googlemail.com>",
+  "homepage": "https://github.com/effectpet/ottervalidation",
+  "bugs": {
+    "url": "https://github.com/effectpet/ottervalidation/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/effectpet/ottervalidation.git"
+  },
   "main": "./dist/index.js",
   "files": [
     "dist/**/*.js",

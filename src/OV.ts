@@ -1,5 +1,5 @@
 import {
-  OVBuiltValidations, OVInputObject, OVResult, OVValidations,
+  OVBuiltValidations, OVInputObject, OVResult, OVValidation,
 } from './types';
 import { buildValidation, validate } from './validation';
 
@@ -8,9 +8,9 @@ export default class OV<T extends OVInputObject> {
 
   public constructor(
     private object: T,
-    validations: OVValidations,
+    validation: OVValidation,
   ) {
-    this.builtValidation = buildValidation(validations);
+    this.builtValidation = buildValidation(validation);
   }
 
   public validate(): OVResult<T> {

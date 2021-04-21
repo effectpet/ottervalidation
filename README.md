@@ -38,7 +38,7 @@ import OV from 'ottervalidation';
 
 const form = {
     username: 'Some username',
-    password: 'Some password',
+    password: 'SomeP4ssword!',
     mailAddress: 'some@email.com',
 };
 

@@ -1,5 +1,5 @@
 import {
-  OVValidations, OVBuiltValidations, ValidationTypeKeys, FakeValidationType, OVInputObject,
+  OVValidation, OVBuiltValidations, ValidationKey, FakeValidationType, OVInputObject,
   ResultErrors, OVResult,
 } from './types';
 import ValidationTypes from './validation_types/ValidationTypes';
@@ -35,17 +35,17 @@ const validate = <T>(object: OVInputObject, builtValidation: OVBuiltValidations)
   return objectResult as OVResult<T>;
 };
 
-const buildValidation = (validations: OVValidations): OVBuiltValidations => {
+const buildValidation = (validation: OVValidation): OVBuiltValidations => {
   const validationsBuilt: OVBuiltValidations = {};
 
-  Object.keys(validations).forEach((objectKey) => {
-    const validation = validations[objectKey];
+  Object.keys(validation).forEach((objectKey) => {
+    const validationConfig = validation[objectKey];
 
     validationsBuilt[objectKey] = [];
 
-    const validationTypeKeys = Object.keys(validation) as Array<ValidationTypeKeys>;
+    const validationTypeKeys = Object.keys(validationConfig) as Array<ValidationKey>;
     validationTypeKeys.forEach((validationTypeKey) => {
-      const validationTypeOption = validation[validationTypeKey];
+      const validationTypeOption = validationConfig[validationTypeKey];
       const validationType = ValidationTypes[validationTypeKey] as FakeValidationType;
       const built = validationType(validationTypeOption);
       validationsBuilt[objectKey].push(built);

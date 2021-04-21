@@ -1,7 +1,8 @@
 import OV from './OV';
-import { OVValidations as OVValidation } from './types';
+import { OVValidation, OVValidationConfig } from './types';
 
 export {
   OV,
   OVValidation,
+  OVValidationConfig,
 };
