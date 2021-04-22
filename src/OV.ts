@@ -1,19 +1,19 @@
 import {
-  OVBuiltValidations, OVInputObject, OVResult, OVValidation,
+  OVInternalValidation, OVObject, OVResult, OVValidation,
 } from './types';
-import { buildValidation, validate } from './validation';
+import { buildInternalValidation, validate } from './validation';
 
-export default class OV<T extends OVInputObject> {
-  private builtValidation: OVBuiltValidations;
+export default class OV<T extends OVObject> {
+  private internalValidation: OVInternalValidation;
 
   public constructor(
     private object: T,
     validation: OVValidation,
   ) {
-    this.builtValidation = buildValidation(validation);
+    this.internalValidation = buildInternalValidation(validation);
   }
 
   public validate(): OVResult<T> {
-    return validate<T>(this.object, this.builtValidation);
+    return validate<T>(this.object, this.internalValidation);
   }
 }

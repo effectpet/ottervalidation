@@ -1,15 +1,15 @@
 import AbstractValidation from './AbstractValidation';
-import { OVInputObject } from '../../types';
+import { ValidationObject } from '../../types';
 
 export default class Required extends AbstractValidation {
   public constructor(private option: boolean) { super(); }
 
-  public check(object: OVInputObject, key: string): void {
+  public check(vObject: ValidationObject): void {
     if (
       this.option === true
-      && Object.keys(object).indexOf(key) === -1
+      && vObject.keyInObject === false
     ) {
-      throw Error(`${key}.required`);
+      throw Error(`${vObject.key}.required`);
     }
   }
 }

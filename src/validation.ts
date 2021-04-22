@@ -1,19 +1,33 @@
 import {
-  OVValidation, OVBuiltValidations, ValidationKey, FakeValidationType, OVInputObject,
-  ResultErrors, OVResult,
+  OVValidation, OVInternalValidation, ValidationKey, FakeValidationType, OVObject,
+  ResultErrors, OVResult, ValidationObject,
 } from './types';
 import ValidationTypes from './validation_types/ValidationTypes';
 
-const validate = <T>(object: OVInputObject, builtValidation: OVBuiltValidations): OVResult<T> => {
+const validate = <T>(
+  object: OVObject,
+  internalValidation: OVInternalValidation,
+): OVResult<T> => {
   const objectResult: Partial<OVResult<Record<string, ResultErrors>>> = {};
   let objectErrors: Array<string> = [];
 
-  Object.keys(builtValidation).forEach((objectKey) => {
+  const objectKeys = Object.keys(object);
+
+  Object.keys(internalValidation).forEach((objectKey) => {
+    const internalValidationConfig = internalValidation[objectKey];
     const keyErrors: Array<string> = [];
 
-    builtValidation[objectKey].forEach((validation) => {
+    const validationObject: ValidationObject = {
+      type: typeof object[objectKey],
+      key: objectKey,
+      value: object[objectKey],
+      object,
+      keyInObject: objectKeys.indexOf(objectKey) > -1,
+    };
+
+    internalValidationConfig.forEach((validationType) => {
       try {
-        validation.check(object, objectKey, object[objectKey]);
+        validationType.check(validationObject);
       } catch (e) {
         keyErrors.push(e.message);
       }
@@ -35,24 +49,24 @@ const validate = <T>(object: OVInputObject, builtValidation: OVBuiltValidations)
   return objectResult as OVResult<T>;
 };
 
-const buildValidation = (validation: OVValidation): OVBuiltValidations => {
-  const validationsBuilt: OVBuiltValidations = {};
+const buildInternalValidation = (validation: OVValidation): OVInternalValidation => {
+  const internalValidation: OVInternalValidation = {};
 
   Object.keys(validation).forEach((objectKey) => {
     const validationConfig = validation[objectKey];
 
-    validationsBuilt[objectKey] = [];
+    internalValidation[objectKey] = [];
 
     const validationTypeKeys = Object.keys(validationConfig) as Array<ValidationKey>;
     validationTypeKeys.forEach((validationTypeKey) => {
       const validationTypeOption = validationConfig[validationTypeKey];
       const validationType = ValidationTypes[validationTypeKey] as FakeValidationType;
       const built = validationType(validationTypeOption);
-      validationsBuilt[objectKey].push(built);
+      internalValidation[objectKey].push(built);
     });
   });
 
-  return validationsBuilt;
+  return internalValidation;
 };
 
-export { validate, buildValidation };
+export { validate, buildInternalValidation };

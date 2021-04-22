@@ -2,65 +2,62 @@ import { describe, it } from 'mocha';
 import { deepStrictEqual } from 'assert';
 import { OV, OVValidation } from '../../src';
 
-describe('Validation type - Type', () => {
+describe('Validation type - Regex', () => {
   const validation: OVValidation = {
     username: {
-      type: ['string', 'number'],
-    },
-    birthYear: {
-      type: 'number',
-    },
-    accepted_terms: {
-      type: 'boolean',
+      regex: /^[a-zA-Z0-9]*$/,
     },
   };
 
-  describe('With valid types', () => {
+  describe('With valid value', () => {
     it('should return no errors', () => {
       const form = {
-        username: 'some username',
-        birthYear: 1991,
-        accepted_terms: true,
+        username: 'ValidUsername1',
       };
 
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
         username: {},
-        birthYear: {},
-        accepted_terms: {},
       };
 
       deepStrictEqual(expectedResult, ovResult);
     });
   });
-  describe('With invalid types', () => {
+  describe('With invalid value', () => {
     it('should return errors', () => {
       const form = {
-        username: true,
-        birthYear: '1991',
-        accepted_terms: 'yes',
+        username: 'Invalid Username1',
       };
 
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        errors: ['username.type', 'birthYear.type', 'accepted_terms.type'],
+        errors: ['username.regex'],
         username: {
-          errors: ['username.type'],
-        },
-        birthYear: {
-          errors: ['birthYear.type'],
-        },
-        accepted_terms: {
-          errors: ['accepted_terms.type'],
+          errors: ['username.regex'],
         },
       };
 
       deepStrictEqual(expectedResult, ovResult);
     });
   });
-  describe('With missing keys', () => {
+  describe('With wrong type', () => {
+    it('should return no errors', () => {
+      const form = {
+        username: 123,
+      };
+
+      const ov = new OV(form, validation);
+      const ovResult = ov.validate();
+      const expectedResult = {
+        username: {},
+      };
+
+      deepStrictEqual(expectedResult, ovResult);
+    });
+  });
+  describe('With missing key', () => {
     it('should return no errors', () => {
       const form = {};
 
@@ -68,8 +65,6 @@ describe('Validation type - Type', () => {
       const ovResult = ov.validate();
       const expectedResult = {
         username: {},
-        birthYear: {},
-        accepted_terms: {},
       };
 
       deepStrictEqual(expectedResult, ovResult);

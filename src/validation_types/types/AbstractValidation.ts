@@ -1,5 +1,5 @@
-import { OVInputObject } from '../../types';
+import { ValidationObject } from '../../types';
 
 export default abstract class ValidationType {
-  public abstract check(object: OVInputObject, key: string, value: unknown): void;
+  public abstract check(vObject: ValidationObject): void;
 }

@@ -116,15 +116,16 @@ const ovResult = ov.validate();
 | Key | Argument | Description | Works with |
 | --- | --- | --- | --- |
 | required | boolean | checks whether the key exists in the object | string, number, boolean |
-| type | string | Checks whether the value is of the given type | string, number, boolean |
+| type | string | string[] | Checks whether the value is of the given type | string, number, boolean |
 | minLength | number | Checks whether the value has the minimum length | string |
 | maxLength | number | Checks whether the value has the maximum length | string |
+| exactLength | number | Checks whether the value has the exact length | string |
 | email | boolean | Checks whether the value is an e-mail address | string |
 | minUpperCase | number | Checks whether the value has the minimum number of uppercase letters | string |
 | minLowerCase | number | Checks whether the value has the minimum number of lowercase letters | string |
 | minNumeric | number | Checks whether the value has the minimum number of numerics | string |
 | minSymbol | number | Checks whether the value has the minimum number of symbol characters | string |
-
+| regex | regex | Checks whether the value matches against the regex | string |
 
 ## Contributing
 

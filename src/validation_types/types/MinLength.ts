@@ -1,15 +1,15 @@
 import AbstractValidation from './AbstractValidation';
-import { OVInputObject } from '../../types';
+import { ValidationObject } from '../../types';
 
 export default class MinLength extends AbstractValidation {
   public constructor(private option: number) { super(); }
 
-  public check(object: OVInputObject, key: string, value: unknown): void {
+  public check(vObject: ValidationObject): void {
     if (
-      typeof value === 'string'
-      && value.length < this.option
+      vObject.type === 'string'
+      && vObject.value.length < this.option
     ) {
-      throw Error(`${key}.minlength`);
+      throw Error(`${vObject.key}.minlength`);
     }
   }
 }

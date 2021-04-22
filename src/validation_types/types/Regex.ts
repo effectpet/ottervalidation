@@ -1,15 +1,15 @@
 import AbstractValidation from './AbstractValidation';
 import { ValidationObject } from '../../types';
 
-export default class MaxLength extends AbstractValidation {
-  public constructor(private option: number) { super(); }
+export default class Regex extends AbstractValidation {
+  public constructor(private option: RegExp) { super(); }
 
   public check(vObject: ValidationObject): void {
     if (
       vObject.type === 'string'
-      && vObject.value.length > this.option
+      && this.option.test(vObject.value) === false
     ) {
-      throw Error(`${vObject.key}.maxlength`);
+      throw Error(`${vObject.key}.regex`);
     }
   }
 }

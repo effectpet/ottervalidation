@@ -1,18 +1,18 @@
 import AbstractValidation from './AbstractValidation';
-import { OVInputObject } from '../../types';
+import { ValidationObject } from '../../types';
 
 export default class MinSymbol extends AbstractValidation {
   // eslint-disable-next-line no-useless-escape
-  public static readonly SYMBOL_REGEX = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g;
+  private static SYMBOL_REGEX = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g;
 
   public constructor(private option: number) { super(); }
 
-  public check(object: OVInputObject, key: string, value: unknown): void {
+  public check(vObject: ValidationObject): void {
     if (
-      typeof value === 'string'
-      && (value.match(MinSymbol.SYMBOL_REGEX) || []).length < this.option
+      vObject.type === 'string'
+      && (vObject.value.match(MinSymbol.SYMBOL_REGEX) || []).length < this.option
     ) {
-      throw Error(`${key}.minsymbol`);
+      throw Error(`${vObject.key}.minsymbol`);
     }
   }
 }

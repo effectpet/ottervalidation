@@ -1,7 +1,7 @@
 import AbstractValidation from './validation_types/types/AbstractValidation';
 import ValidationTypes from './validation_types/ValidationTypes';
 
-type OVInputObject = Record<string, any>;
+type OVObject = Record<string, any>;
 type ResultErrors = {
   errors?: Array<string>
 };
@@ -18,17 +18,26 @@ type OVValidationConfig = {
 type OVValidation = {
   [key: string]: OVValidationConfig
 };
-type OVBuiltValidations = {
+type OVInternalValidation = {
   [key: string]: Array<AbstractValidation>
 };
 
+type ValidationObject = {
+  type: 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function',
+  key: string,
+  value: any,
+  object: OVObject,
+  keyInObject: boolean,
+};
+
 export {
-  OVInputObject,
+  OVObject,
   OVResult,
   ResultErrors,
   FakeValidationType,
   ValidationKey,
   OVValidation,
   OVValidationConfig,
-  OVBuiltValidations,
+  OVInternalValidation,
+  ValidationObject,
 };
