@@ -3,7 +3,13 @@ import { deepStrictEqual } from 'assert';
 import { OV, OVValidation } from '../../src';
 
 describe('Validation type - Type', () => {
-  const validation: OVValidation = {
+  interface Form {
+    username: string,
+    birthYear: number,
+    accepted_terms: boolean,
+  }
+
+  const validation: OVValidation<Form> = {
     username: {
       type: ['string', 'number'],
     },
@@ -26,9 +32,11 @@ describe('Validation type - Type', () => {
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        username: {},
-        birthYear: {},
-        accepted_terms: {},
+        object: {
+          username: {},
+          birthYear: {},
+          accepted_terms: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);
@@ -46,14 +54,16 @@ describe('Validation type - Type', () => {
       const ovResult = ov.validate();
       const expectedResult = {
         errors: ['username.type', 'birthYear.type', 'accepted_terms.type'],
-        username: {
-          errors: ['username.type'],
-        },
-        birthYear: {
-          errors: ['birthYear.type'],
-        },
-        accepted_terms: {
-          errors: ['accepted_terms.type'],
+        object: {
+          username: {
+            errors: ['username.type'],
+          },
+          birthYear: {
+            errors: ['birthYear.type'],
+          },
+          accepted_terms: {
+            errors: ['accepted_terms.type'],
+          },
         },
       };
 
@@ -62,14 +72,16 @@ describe('Validation type - Type', () => {
   });
   describe('With missing keys', () => {
     it('should return no errors', () => {
-      const form = {};
+      const form = {} as Form;
 
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        username: {},
-        birthYear: {},
-        accepted_terms: {},
+        object: {
+          username: {},
+          birthYear: {},
+          accepted_terms: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);

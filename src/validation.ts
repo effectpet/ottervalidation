@@ -1,31 +1,31 @@
 import {
-  OVValidation, OVInternalValidation, ValidationKey, FakeValidationType, OVObject,
-  ResultErrors, OVResult, ValidationObject,
+  OVValidation, OVInternalValidation, OVValidationConfigKey, FakeValidationType, OVObject,
+  OVResultErrors, OVResult, ValidationObject, OVResultObject,
 } from './types';
 import ValidationTypes from './validation_types/ValidationTypes';
 
 const validate = <T>(
-  object: OVObject,
-  internalValidation: OVInternalValidation,
+  object: OVObject<T>,
+  iValidation: OVInternalValidation<T>,
 ): OVResult<T> => {
-  const objectResult: Partial<OVResult<Record<string, ResultErrors>>> = {};
-  let objectErrors: Array<string> = [];
+  const resultObject: Partial<OVResultObject<T>> = {};
+  const objectKeys = Object.keys(object) as Array<keyof OVObject<T>>;
+  let resultErrors: string[] = [];
 
-  const objectKeys = Object.keys(object);
-
-  Object.keys(internalValidation).forEach((objectKey) => {
-    const internalValidationConfig = internalValidation[objectKey];
-    const keyErrors: Array<string> = [];
-
+  const iValidationKeys = Object.keys(iValidation) as Array<keyof OVInternalValidation<T>>;
+  iValidationKeys.forEach((iValidationKey) => {
+    const objectValue = object[iValidationKey];
     const validationObject: ValidationObject = {
-      type: typeof object[objectKey],
-      key: objectKey,
-      value: object[objectKey],
+      type: typeof objectValue,
+      key: String(iValidationKey),
+      value: objectValue,
       object,
-      keyInObject: objectKeys.indexOf(objectKey) > -1,
+      keyInObject: objectKeys.indexOf(iValidationKey) > -1,
     };
 
-    internalValidationConfig.forEach((validationType) => {
+    const keyErrors: string[] = [];
+    const iValidationConfig = iValidation[iValidationKey];
+    iValidationConfig.forEach((validationType) => {
       try {
         validationType.check(validationObject);
       } catch (e) {
@@ -33,40 +33,43 @@ const validate = <T>(
       }
     });
 
-    const keyResult: ResultErrors = {};
+    const keyResultErrors: OVResultErrors = {};
     if (keyErrors.length > 0) {
-      keyResult.errors = keyErrors;
-      objectErrors = objectErrors.concat(keyErrors);
+      keyResultErrors.errors = keyErrors;
+      resultErrors = resultErrors.concat(keyErrors);
     }
 
-    objectResult[objectKey] = keyResult;
+    resultObject[iValidationKey] = keyResultErrors;
   });
 
-  if (objectErrors.length > 0) {
-    objectResult.errors = objectErrors;
+  const objectResult: OVResult<T> = {
+    object: resultObject as OVResultObject<T>,
+  };
+
+  if (resultErrors.length > 0) {
+    objectResult.errors = resultErrors;
   }
 
-  return objectResult as OVResult<T>;
+  return objectResult;
 };
 
-const buildInternalValidation = (validation: OVValidation): OVInternalValidation => {
-  const internalValidation: OVInternalValidation = {};
+const buildInternalValidation = <T>(validation: OVValidation<T>): OVInternalValidation<T> => {
+  const internalValidation: Partial<OVInternalValidation<T>> = {};
 
-  Object.keys(validation).forEach((objectKey) => {
+  const validationKeys = Object.keys(validation) as Array<keyof typeof validation>;
+  validationKeys.forEach((objectKey) => {
     const validationConfig = validation[objectKey];
 
-    internalValidation[objectKey] = [];
+    const validationConfigKeys = Object.keys(validationConfig) as Array<OVValidationConfigKey>;
+    internalValidation[objectKey] = validationConfigKeys.map((validationConfigKey) => {
+      const validationTypeOption = validationConfig[validationConfigKey];
+      const validationType = ValidationTypes[validationConfigKey] as FakeValidationType;
 
-    const validationTypeKeys = Object.keys(validationConfig) as Array<ValidationKey>;
-    validationTypeKeys.forEach((validationTypeKey) => {
-      const validationTypeOption = validationConfig[validationTypeKey];
-      const validationType = ValidationTypes[validationTypeKey] as FakeValidationType;
-      const built = validationType(validationTypeOption);
-      internalValidation[objectKey].push(built);
+      return validationType(validationTypeOption);
     });
   });
 
-  return internalValidation;
+  return internalValidation as OVInternalValidation<T>;
 };
 
 export { validate, buildInternalValidation };

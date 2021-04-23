@@ -3,7 +3,12 @@ import { deepStrictEqual } from 'assert';
 import { OV, OVValidation } from '../../src';
 
 describe('Validation type - Required', () => {
-  const validation: OVValidation = {
+  interface Form {
+    username: string,
+    password: string,
+  }
+
+  const validation: OVValidation<Form> = {
     username: {
       required: true,
     },
@@ -22,8 +27,10 @@ describe('Validation type - Required', () => {
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        username: {},
-        password: {},
+        object: {
+          username: {},
+          password: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);
@@ -31,15 +38,16 @@ describe('Validation type - Required', () => {
   });
   describe('With missing keys', () => {
     it('should return errors', () => {
-      const form = {
-      };
+      const form = {} as Form;
 
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
         errors: ['username.required'],
-        username: { errors: ['username.required'] },
-        password: {},
+        object: {
+          username: { errors: ['username.required'] },
+          password: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);

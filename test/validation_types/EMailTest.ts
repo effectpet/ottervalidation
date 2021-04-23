@@ -3,7 +3,11 @@ import { deepStrictEqual } from 'assert';
 import { OV, OVValidation } from '../../src';
 
 describe('Validation type - EMail', () => {
-  const validation: OVValidation = {
+  interface Form {
+    email: string,
+  }
+
+  const validation: OVValidation<Form> = {
     email: {
       email: true,
     },
@@ -18,7 +22,9 @@ describe('Validation type - EMail', () => {
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        email: {},
+        object: {
+          email: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);
@@ -34,8 +40,10 @@ describe('Validation type - EMail', () => {
       const ovResult = ov.validate();
       const expectedResult = {
         errors: ['email.email'],
-        email: {
-          errors: ['email.email'],
+        object: {
+          email: {
+            errors: ['email.email'],
+          },
         },
       };
 
@@ -51,7 +59,9 @@ describe('Validation type - EMail', () => {
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        email: {},
+        object: {
+          email: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);
@@ -59,12 +69,14 @@ describe('Validation type - EMail', () => {
   });
   describe('With missing value', () => {
     it('should return no errors', () => {
-      const form = {};
+      const form = {} as Form;
 
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        email: {},
+        object: {
+          email: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);

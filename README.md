@@ -7,107 +7,100 @@
 ```bash
 npm install ottervalidation
 ```
-## Usage
-
-```javascript
-import OV from 'ottervalidation';
-
-const form = {
-    username: 'Some username',
-};
-
-const validation: OVValidation = {
-    username: {
-        required: true,
-    },
-}
-
-const ov = new OV(form, validation);
-const ovResult = ov.validate();
-/*
-    ovResult: {
-        username: {}
-    }
-*/
-```
 
 ## Full example
 
 ```javascript
-import OV from 'ottervalidation';
+import { OV, OVValidation } from 'ottervalidation';
 
-const form = {
-    username: 'Some username',
-    password: 'SomeP4ssword!',
-    mailAddress: 'some@email.com',
+interface Form {
+  username: string,
+  password: string,
+  mailAddress: string,
+}
+
+const form: Form = {
+  username: 'Some username',
+  password: 'SomeP4ssword!',
+  mailAddress: 'some@email.com',
 };
 
-const validation: OVValidation = {
-    username: {
-        required: true,
-        type: 'string',
-        minLength: 4,
-        maxLength: 32,
-    },
-    password: {
-        required: true,
-        type: 'string',
-        minLength: 8,
-        maxLength: 128,
-        minUpperCase: 1,
-        minLowerCase: 1,
-        minNumeric: 1,
-        minSymbol: 1,
-    },
-    mailAddress: {
-        required: true,
-        type: 'string',
-        email: true,
-    },
-}
+const validation: OVValidation<Form> = {
+  username: {
+    required: true,
+    type: 'string',
+    minLength: 4,
+    maxLength: 32,
+  },
+  password: {
+    required: true,
+    type: 'string',
+    minLength: 8,
+    maxLength: 128,
+    minUpperCase: 1,
+    minLowerCase: 1,
+    minNumeric: 1,
+    minSymbol: 1,
+  },
+  mailAddress: {
+    required: true,
+    type: 'string',
+    email: true,
+  },
+};
 
 const ov = new OV(form, validation);
 const ovResult = ov.validate();
 /*
-    ovResult: {
-        username: {},
-        password: {},
-        mailAddress: {},
+  ovResult: {
+    object: {
+      username: {},
+      password: {},
+      mailAddress: {},
     }
+  }
 */
 ```
 
 ## Example with errors
 
 ```javascript
-import OV from 'ottervalidation';
+import { OV, OVValidation } from 'ottervalidation';
+
+interface Form {
+  username: string,
+  password: string,
+  mailAddress: string,
+}
 
 const form = {
-    password: 'invalid length',
-    mailAddress: 'invalid email',
-};
+  password: 'invalid length',
+  mailAddress: 'invalid email',
+} as Form;
 
-const validation: OVValidation = {
-    username: {
-        required: true,
-    },
-    password: {
-        minLength: 32,
-    },
-    mailAddress: {
-        email: true,
-    },
-}
+const validation: OVValidation<Form> = {
+  username: {
+    required: true,
+  },
+  password: {
+    minLength: 32,
+  },
+  mailAddress: {
+    email: true,
+  },
+};
 
 const ov = new OV(form, validation);
 const ovResult = ov.validate();
 /*
-    ovResult: {
-        errors?: ['username.required', 'password.minlength', 'mailAddress.email'],
-        username: { errors?: ['username.required'] },
-        password: { errors?: ['password.minlength'] },
-        mailAddress: { errors?: ['mailAddress.email'] },
+  ovResult: {
+    errors: ['username.required', 'password.minlength', 'mailAddress.email'],
+    object: {
+      username: { errors: ['username.required'] },
+      password: { errors: ['password.minlength'] },
+      mailAddress: { errors: ['mailAddress.email'] },
     }
+  }
 */
 ```
 

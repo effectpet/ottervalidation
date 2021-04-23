@@ -1,8 +1,8 @@
-import { OV, OVValidation } from '../src';
+import { OV, OVObject, OVValidation } from '../src';
 
-const benchmark = (
-  form: Record<string, any>,
-  validation: OVValidation,
+const benchmark = <T>(
+  form: OVObject<T>,
+  validation: OVValidation<T>,
   iterations: number,
 ): string => {
   const start = new Date();
@@ -18,13 +18,19 @@ const benchmark = (
   return `${difference}ms after ${iterations} iterations`;
 };
 
-const form = {
+interface Form {
+  username: string,
+  password: string,
+  emailAddress: string,
+}
+
+const form: Form = {
   username: 'Username',
   password: 'SomeP4ssw0rd!',
-  emailaddress: 'some@mail.com',
+  emailAddress: 'some@mail.com',
 };
 
-const validation: OVValidation = {
+const validation: OVValidation<Form> = {
   username: {
     required: true,
     type: 'string',
@@ -41,7 +47,7 @@ const validation: OVValidation = {
     minSymbol: 1,
     minNumeric: 1,
   },
-  emailaddress: {
+  emailAddress: {
     required: true,
     type: 'string',
     email: true,

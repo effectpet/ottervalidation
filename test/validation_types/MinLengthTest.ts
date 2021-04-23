@@ -3,7 +3,11 @@ import { deepStrictEqual } from 'assert';
 import { OV, OVValidation } from '../../src';
 
 describe('Validation type - MinLength', () => {
-  const validation: OVValidation = {
+  interface Form {
+    username: string,
+  }
+
+  const validation: OVValidation<Form> = {
     username: {
       minLength: 4,
     },
@@ -18,7 +22,9 @@ describe('Validation type - MinLength', () => {
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        username: {},
+        object: {
+          username: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);
@@ -34,8 +40,10 @@ describe('Validation type - MinLength', () => {
       const ovResult = ov.validate();
       const expectedResult = {
         errors: ['username.minlength'],
-        username: {
-          errors: ['username.minlength'],
+        object: {
+          username: {
+            errors: ['username.minlength'],
+          },
         },
       };
 
@@ -51,7 +59,9 @@ describe('Validation type - MinLength', () => {
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        username: {},
+        object: {
+          username: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);
@@ -59,12 +69,14 @@ describe('Validation type - MinLength', () => {
   });
   describe('With missing value', () => {
     it('should return no errors', () => {
-      const form = {};
+      const form = {} as Form;
 
       const ov = new OV(form, validation);
       const ovResult = ov.validate();
       const expectedResult = {
-        username: {},
+        object: {
+          username: {},
+        },
       };
 
       deepStrictEqual(expectedResult, ovResult);

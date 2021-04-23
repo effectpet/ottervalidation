@@ -3,12 +3,12 @@ import {
 } from './types';
 import { buildInternalValidation, validate } from './validation';
 
-export default class OV<T extends OVObject> {
-  private internalValidation: OVInternalValidation;
+export default class OV<T> {
+  private internalValidation: OVInternalValidation<T>;
 
   public constructor(
-    private object: T,
-    validation: OVValidation,
+    private object: OVObject<T>,
+    validation: OVValidation<T>,
   ) {
     this.internalValidation = buildInternalValidation(validation);
   }

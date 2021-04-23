@@ -1,43 +1,57 @@
 import AbstractValidation from './validation_types/types/AbstractValidation';
 import ValidationTypes from './validation_types/ValidationTypes';
 
-type OVObject = Record<string, any>;
-type ResultErrors = {
-  errors?: Array<string>
-};
-type OVResult<T> = ResultErrors & {
-  [K in keyof T]: ResultErrors;
-};
-type FakeValidationType = (option: any) => any;
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-shadow
-type Parameters<T> = T extends (...args: infer T) => any ? T : never;
-type ValidationKey = keyof typeof ValidationTypes;
-type OVValidationConfig = {
-  [K in ValidationKey]?: Parameters<typeof ValidationTypes[K]>[0]
-};
-type OVValidation = {
-  [key: string]: OVValidationConfig
-};
-type OVInternalValidation = {
-  [key: string]: Array<AbstractValidation>
+type OVObject<T> = {
+  [K in keyof T]: any;
 };
 
+type OVResultErrors = {
+  errors?: string[],
+};
+type OVResultObject<T> = {
+  [K in keyof T]: OVResultErrors;
+};
+type OVResult<T> = OVResultErrors & {
+  object: OVResultObject<T>,
+};
+
+type FakeValidationType = (option: any) => any;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-shadow
+type Parameters<T> = T extends (...args: infer T) => any ? T : never;
+
+type OVValidation<T> = {
+  [K in keyof T]: OVValidationConfig
+};
+type OVValidationConfig = {
+  [K in OVValidationConfigKey]?: Parameters<typeof ValidationTypes[K]>[0]
+};
+type OVValidationConfigKey = keyof typeof ValidationTypes;
+
+type OVInternalValidation<T> = {
+  [k in keyof T]: Array<AbstractValidation>
+};
 type ValidationObject = {
   type: 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function',
   key: string,
   value: any,
-  object: OVObject,
+  object: Record<string, any>,
   keyInObject: boolean,
 };
 
 export {
   OVObject,
+
+  OVResultErrors,
+  OVResultObject,
   OVResult,
-  ResultErrors,
+
   FakeValidationType,
-  ValidationKey,
+
   OVValidation,
   OVValidationConfig,
+  OVValidationConfigKey,
+
   OVInternalValidation,
   ValidationObject,
 };
