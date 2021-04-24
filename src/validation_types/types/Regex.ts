@@ -9,7 +9,7 @@ export default class Regex extends AbstractValidation {
       vObject.type === 'string'
       && this.option.test(vObject.value) === false
     ) {
-      throw Error(`${vObject.key}.regex`);
+      throw Error('regex');
     }
   }
 }

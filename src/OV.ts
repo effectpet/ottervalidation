@@ -1,6 +1,11 @@
 import {
   KeyOfT,
-  OVInternalValidation, OVObject, OVResult, OVResultErrors, OVValidation,
+  OVConfiguration,
+  OVInternalValidation,
+  OVObject,
+  OVResult,
+  OVResultErrors,
+  OVValidation,
 } from './types';
 import { buildInternalValidation, validate } from './validation';
 
@@ -12,6 +17,7 @@ export default class OV<T> {
   public constructor(
     private object: OVObject<T>,
     validation: OVValidation<T>,
+    private configuration?: OVConfiguration,
   ) {
     this.validationKeys = Object.keys(validation) as KeyOfT<T>[];
     this.internalValidation = buildInternalValidation<T>(
@@ -25,6 +31,7 @@ export default class OV<T> {
       this.object,
       this.internalValidation,
       this.validationKeys,
+      this.configuration,
     );
   }
 
@@ -33,6 +40,7 @@ export default class OV<T> {
       this.object,
       this.internalValidation,
       [key],
+      this.configuration,
     );
 
     return result.object[key];

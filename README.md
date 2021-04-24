@@ -2,11 +2,13 @@
 
 > Simple, lightweight validation with full typescript support
 
+
 ## Installation
 
 ```bash
 npm install ottervalidation
 ```
+
 
 ## Full example
 
@@ -62,6 +64,7 @@ const ovResult = ov.validate();
 */
 ```
 
+
 ## Example with errors
 
 ```javascript
@@ -104,7 +107,8 @@ const ovResult = ov.validate();
 */
 ```
 
-## Checks
+
+## Validation types
 
 | Key | Argument | Description | Works with |
 | --- | --- | --- | --- |
@@ -118,7 +122,45 @@ const ovResult = ov.validate();
 | minLowerCase | number | Checks whether the value has the minimum number of lowercase letters | string |
 | minNumeric | number | Checks whether the value has the minimum number of numerics | string |
 | minSymbol | number | Checks whether the value has the minimum number of symbol characters | string |
-| regex | regex | Checks whether the value matches against the regex | string |
+| regex | RegExp | Checks whether the value matches against the regex | string |
+
+
+## Configuration Example
+
+```javascript
+...
+
+const config: OVConfiguration = {
+  errorMessage: {
+    prefix: 'validation',
+    addKeyPrefix: true,
+    override: {
+      'validation.username.required': 'Username is required',
+    }
+  }
+}
+
+const ov = new OV(form, validation, config);
+const ovResult = ov.validate();
+/*
+  ovResult: {
+    errors: ['Username is required'],
+    object: {
+      username: { errors: ['Username is required'] },
+    }
+  }
+*/
+```
+
+
+## Configuration
+
+| Key | Argument | Description |
+| --- | --- | --- |
+| errorMessage.prefix | string | Adds a prefix to the error message
+| errorMessage.addKeyPrefix | boolean | Add the key prefix to error message (default **true**) |
+| errorMessage.override | Record<string, string> | Overrides the error message |
+
 
 ## Contributing
 

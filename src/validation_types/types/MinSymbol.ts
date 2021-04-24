@@ -12,7 +12,7 @@ export default class MinSymbol extends AbstractValidation {
       vObject.type === 'string'
       && (vObject.value.match(MinSymbol.SYMBOL_REGEX) || []).length < this.option
     ) {
-      throw Error(`${vObject.key}.minsymbol`);
+      throw Error('minsymbol');
     }
   }
 }

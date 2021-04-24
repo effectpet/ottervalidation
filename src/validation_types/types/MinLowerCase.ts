@@ -11,7 +11,7 @@ export default class MinLowerCase extends AbstractValidation {
       vObject.type === 'string'
       && (vObject.value.match(MinLowerCase.LOWERCASE_REGEX) || []).length < this.option
     ) {
-      throw Error(`${vObject.key}.minlowercase`);
+      throw Error('minlowercase');
     }
   }
 }

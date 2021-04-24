@@ -9,7 +9,7 @@ export default class ExactLength extends AbstractValidation {
       vObject.type === 'string'
       && vObject.value.length !== this.option
     ) {
-      throw Error(`${vObject.key}.exactlength`);
+      throw Error('exactlength');
     }
   }
 }

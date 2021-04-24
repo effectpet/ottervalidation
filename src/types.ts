@@ -40,6 +40,14 @@ type ValidationObject = {
   keyInObject: boolean,
 };
 
+type OVConfiguration = {
+  errorMessage?: {
+    prefix?: string,
+    addKeyPrefix?: boolean,
+    override?: Record<string, string>
+  }
+};
+
 export {
   OVObject,
 
@@ -56,4 +64,6 @@ export {
 
   OVInternalValidation,
   ValidationObject,
+
+  OVConfiguration,
 };

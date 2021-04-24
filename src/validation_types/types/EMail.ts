@@ -13,7 +13,7 @@ export default class EMail extends AbstractValidation {
       && vObject.type === 'string'
       && EMail.EMAIL_REGEX.test(vObject.value) === false
     ) {
-      throw Error(`${vObject.key}.email`);
+      throw Error('email');
     }
   }
 }

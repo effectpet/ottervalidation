@@ -11,7 +11,7 @@ export default class MinUpperCase extends AbstractValidation {
       vObject.type === 'string'
       && (vObject.value.match(MinUpperCase.UPPERCASE_REGEX) || []).length < this.option
     ) {
-      throw Error(`${vObject.key}.minuppercase`);
+      throw Error('minuppercase');
     }
   }
 }

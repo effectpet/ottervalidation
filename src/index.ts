@@ -1,6 +1,9 @@
 import OV from './OV';
 import {
-  OVObject, OVValidation, OVValidationConfig,
+  OVObject,
+  OVValidation,
+  OVValidationConfig,
+  OVConfiguration,
 } from './types';
 
 export {
@@ -8,4 +11,5 @@ export {
   OVObject,
   OVValidation,
   OVValidationConfig,
+  OVConfiguration,
 };

@@ -9,7 +9,7 @@ export default class MaxLength extends AbstractValidation {
       vObject.type === 'string'
       && vObject.value.length > this.option
     ) {
-      throw Error(`${vObject.key}.maxlength`);
+      throw Error('maxlength');
     }
   }
 }

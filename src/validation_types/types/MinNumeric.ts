@@ -11,7 +11,7 @@ export default class MinNumeric extends AbstractValidation {
       vObject.type === 'string'
       && (vObject.value.match(MinNumeric.NUMERIC_REGEX) || []).length < this.option
     ) {
-      throw Error(`${vObject.key}.minnumeric`);
+      throw Error('minnumeric');
     }
   }
 }

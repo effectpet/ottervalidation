@@ -9,7 +9,7 @@ export default class MinLength extends AbstractValidation {
       vObject.type === 'string'
       && vObject.value.length < this.option
     ) {
-      throw Error(`${vObject.key}.minlength`);
+      throw Error('minlength');
     }
   }
 }

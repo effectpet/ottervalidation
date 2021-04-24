@@ -1,13 +1,45 @@
 import {
-  OVValidation, OVInternalValidation, OVValidationConfigKey, FakeValidationType, OVObject,
-  OVResultErrors, OVResult, ValidationObject, OVResultObject, KeyOfT,
+  OVValidation,
+  OVInternalValidation,
+  OVValidationConfigKey,
+  FakeValidationType,
+  OVObject,
+  OVResultErrors,
+  OVResult,
+  ValidationObject,
+  OVResultObject,
+  KeyOfT,
+  OVConfiguration,
 } from './types';
 import ValidationTypes from './validation_types/ValidationTypes';
+
+const buildErrorMessage = (
+  errorKey: string,
+  validationKey: string,
+  configuration?: OVConfiguration,
+): string => {
+  let errorMessage = `${validationKey}.${errorKey}`;
+
+  if (configuration?.errorMessage) {
+    if (configuration.errorMessage.addKeyPrefix === false) {
+      errorMessage = errorKey;
+    }
+    if (configuration.errorMessage.prefix) {
+      errorMessage = `${configuration.errorMessage.prefix}.${errorMessage}`;
+    }
+    if (configuration.errorMessage.override) {
+      errorMessage = configuration.errorMessage.override[errorMessage] ?? errorMessage;
+    }
+  }
+
+  return errorMessage;
+};
 
 const validate = <T>(
   object: OVObject<T>,
   iValidation: OVInternalValidation<T>,
   validationKeys: KeyOfT<T>[],
+  configuration?: OVConfiguration,
 ): OVResult<T> => {
   const resultObject: Partial<OVResultObject<T>> = {};
   const objectKeys = Object.keys(object) as KeyOfT<T>[];
@@ -29,7 +61,8 @@ const validate = <T>(
       try {
         validationType.check(validationObject);
       } catch (e) {
-        keyErrors.push(e.message);
+        const errorKey = buildErrorMessage(e.message, validationObject.key, configuration);
+        keyErrors.push(errorKey);
       }
     });
 

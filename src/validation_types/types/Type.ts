@@ -14,7 +14,7 @@ export default class Type extends AbstractValidation {
         || (optionIsArray === false && this.option !== vObject.type)
       )
     ) {
-      throw Error(`${vObject.key}.type`);
+      throw Error('type');
     }
   }
 }

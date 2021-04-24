@@ -9,7 +9,7 @@ export default class Required extends AbstractValidation {
       this.option === true
       && vObject.keyInObject === false
     ) {
-      throw Error(`${vObject.key}.required`);
+      throw Error('required');
     }
   }
 }
