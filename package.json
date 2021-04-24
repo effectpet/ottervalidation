@@ -1,6 +1,6 @@
 {
   "name": "ottervalidation",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Simple, lightweight validation with full typescript support",
   "keywords": [
     "typescript",
