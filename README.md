@@ -113,7 +113,7 @@ const ovResult = ov.validate();
 | Key | Argument | Description | Works with |
 | --- | --- | --- | --- |
 | required | boolean | checks whether the key exists in the object | string, number, boolean |
-| type | string | string[] | Checks whether the value is of the given type | string, number, boolean |
+| type | string / string[] | Checks whether the value is of the given type | string, number, boolean |
 | minLength | number | Checks whether the value has the minimum length | string |
 | maxLength | number | Checks whether the value has the maximum length | string |
 | exactLength | number | Checks whether the value has the exact length | string |
